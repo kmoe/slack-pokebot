@@ -1,0 +1,24 @@
+{
+  "name": "slack-pokebot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "no"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmoe/slack-pokebot.git"
+  },
+  "author": "Katy Moe <katy@katy.moe> (http://katy.moe)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kmoe/slack-pokebot/issues"
+  },
+  "homepage": "https://github.com/kmoe/slack-pokebot#readme",
+  "dependencies": {
+    "lodash": "^4.14.0",
+    "pokemon-go-node-api": "^1.3.0",
+    "request": "^2.74.0"
+  }
+}
