@@ -56,8 +56,6 @@ a.init(username, password, location, provider, function(err) {
               var pokemon = a.pokemonlist[parseInt(pokeId)-1];
 
               var pokemonAlreadyPresent = _.some(pokeMap, function(poke) {
-                console.log(poke.id);
-                console.log(pokeId);
                 return poke.id === pokeId;
               });
 
