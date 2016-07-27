@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "no",
-    "start": "node index.js"
+    "start": "touch .data && node index.js"
   },
   "repository": {
     "type": "git",
