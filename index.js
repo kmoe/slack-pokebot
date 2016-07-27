@@ -25,7 +25,8 @@ a.init(username, password, location, provider, function(err) {
 
   console.log('1[i] Current location: ' + a.playerInfo.locationName);
   console.log('1[i] lat/long/alt: : ' + a.playerInfo.latitude + ' ' + a.playerInfo.longitude + ' ' + a.playerInfo.altitude);
-  var start_location = a.playerInfo.latitude + ',' + a.playerInfo.longitude;
+  var start_location = {latitude:a.playerInfo.latitude,
+                        longitude:a.playerInfo.longitude};
 
   a.GetProfile(function(err, profile) {
     if (err) throw err;
@@ -66,25 +67,26 @@ a.init(username, password, location, provider, function(err) {
               if (!pokemonAlreadyPresent) {
                 var position = { latitude : wildPokemon[j].Latitude,
                                  longitude : wildPokemon[j].Longitude};
-
-                var distance = geolib.getDistance(postion,start_location)
+console.log( position , start_location );
+                var distance = geolib.getDistance(position,start_location)
                 if ( metrics.shouldReport( wildPokemon[j] , pokemon , distance) ){
-                  var message = 'There is a ' + pokemon.name + ' '+distance+'m away! Route: https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=' + start_location.latitude+","+start_location.longditude+'&daddr=' + position.latitude + ',' + position.longitude;
+                  var message = 'There is a ' + pokemon.name + ' '+distance+'m away! <https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=' + start_location.latitude+","+start_location.longitude+'&daddr=' + position.latitude + ',' + position.longitude+'|Route>';
                   console.log(pokemon.name + ' detected');
-console.log(message);
-/*
-                  request.post({
-                    url: process.env.SLACK_WEBHOOK_URL,
-                    json: true,
-                    body: {
-                      text: message,
-                      icon_url: pokemon.img
-                    }
-                  }, function(error, response, body) {
-                    console.error(error);
-                    console.log(response.body);
-                  });
-*/
+                  if ( process.env.SLACK_WWEBHOOK_URL ){
+                    request.post({
+                      url: process.env.SLACK_WEBHOOK_URL,
+                      json: true,
+                      body: {
+                        text: message,
+                        icon_url: pokemon.img
+                      }
+                    }, function(error, response, body) {
+                      console.error(error);
+                      if(response.body) console.log(response.body);
+                    });
+                  }else{
+                    console.log( message );
+                  }
                 } else {
                   console.log(pokemon.name + ' not interesting: skipping');
                 }
