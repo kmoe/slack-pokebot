@@ -71,7 +71,8 @@ a.init(username, password, location, provider, function(err) {
                 if ( metrics.shouldReport( wildPokemon[j] , pokemon , distance) ){
                   var message = 'There is a ' + pokemon.name + ' '+distance+'m away! Route: https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=' + start_location.latitude+","+start_location.longditude+'&daddr=' + position.latitude + ',' + position.longitude;
                   console.log(pokemon.name + ' detected');
-
+console.log(message);
+/*
                   request.post({
                     url: process.env.SLACK_WEBHOOK_URL,
                     json: true,
@@ -83,6 +84,7 @@ a.init(username, password, location, provider, function(err) {
                     console.error(error);
                     console.log(response.body);
                   });
+*/
                 } else {
                   console.log(pokemon.name + ' not interesting: skipping');
                 }
