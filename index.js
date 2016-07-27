@@ -22,6 +22,7 @@ a.init(username, password, location, provider, function(err) {
 
   console.log('1[i] Current location: ' + a.playerInfo.locationName);
   console.log('1[i] lat/long/alt: : ' + a.playerInfo.latitude + ' ' + a.playerInfo.longitude + ' ' + a.playerInfo.altitude);
+  var start_location = a.playerInfo.latitude + ',' + a.playerInfo.longitude;
 
   a.GetProfile(function(err, profile) {
     if (err) throw err;
@@ -63,7 +64,7 @@ a.init(username, password, location, provider, function(err) {
                 var latitude = wildPokemon[j].Latitude;
                 var longitude = wildPokemon[j].Longitude;
 
-                var message = 'There is a ' + pokemon.name + ' nearby! Map: https://www.google.co.uk/maps/@' + latitude + ',' + longitude + ',14z?hl=en';
+                var message = 'There is a ' + pokemon.name + ' nearby! Map: https://maps.google.co.uk/maps?f=d&dirflg=w&saddr='+start_location+'&daddr=' + latitude + ',' + longitude;
                 console.log(pokemon.name + ' detected');
 
                 request.post({
