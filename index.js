@@ -2,7 +2,10 @@
 
 var PokemonGO = require('pokemon-go-node-api');
 var request = require('request');
+var geolib = require('geolib');
 var _ = require('lodash');
+
+var metrics = require('./metrics');
 
 var a = new PokemonGO.Pokeio();
 
@@ -22,7 +25,8 @@ a.init(username, password, location, provider, function(err) {
 
   console.log('1[i] Current location: ' + a.playerInfo.locationName);
   console.log('1[i] lat/long/alt: : ' + a.playerInfo.latitude + ' ' + a.playerInfo.longitude + ' ' + a.playerInfo.altitude);
-  var start_location = a.playerInfo.latitude + ',' + a.playerInfo.longitude;
+  var start_location = {latitude:a.playerInfo.latitude,
+                        longitude:a.playerInfo.longitude};
 
   a.GetProfile(function(err, profile) {
     if (err) throw err;
@@ -64,9 +68,12 @@ a.init(username, password, location, provider, function(err) {
                   var latitude = wildPokemon[j].Latitude;
                   var longitude = wildPokemon[j].Longitude;
 
-                  var message = 'There is a ' + pokemon.name + ' nearby! Map: https://maps.google.co.uk/maps?f=d&dirflg=w&saddr='+start_location+'&daddr=' + latitude + ',' + longitude;
-                  console.log(pokemon.name + ' detected');
-
+                  var position = { latitude : wildPokemon[j].Latitude,
+                                   longitude : wildPokemon[j].Longitude};
+                  var distance = geolib.getDistance(position,start_location)
+                  if ( metrics.shouldReport( wildPokemon[j] , pokemon , distance) ){
+                    var message = 'There is a *' + pokemon.name + '* ('+pokemon.num+') '+distance+'m away! <https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=' + start_location.latitude+","+start_location.longitude+'&daddr=' + position.latitude + ',' + position.longitude+'|Route>';
+                    if ( process.env.SLACK_WWEBHOOK_URL ){
                     request.post({
                       url: process.env.SLACK_WEBHOOK_URL,
                       json: true,
@@ -76,13 +83,18 @@ a.init(username, password, location, provider, function(err) {
                       }
                     }, function(error, response, body) {
                       console.error(error);
-                      console.log(response.body);
+                      if(response.body) console.log(response.body);
                     });
-                  } else {
-                    console.log(pokemon.name + ' already present: skipping');
+                  }else{
+                    console.log("POST: "+ message );
                   }
+                } else {
+                  console.log(pokemon.name + ' not interesting: skipping');
                 }
-
+              } else {
+               console.log(pokemon.name + ' already present: skipping');
+              }
+            }
               pokeMap = _.map(wildPokemon, function(poke) {
                 return {
                   id: poke.pokemon.PokemonId
@@ -93,6 +105,5 @@ a.init(username, password, location, provider, function(err) {
         }
       });
     }, 60000);
-
   });
 });
