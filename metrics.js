@@ -23,9 +23,10 @@ function shouldReport(encounter,pokemon,distance){
 }
 
 function loadDataSet(){
-  if ( fs.accessSync(dataFilePath, fs.F_OK) ){
+  try{
     return JSON.parse(fs.readFileSync( dataFilePath , 'utf8' ));
-  }else{
+  }catch(e){
+    console.log(e);
     return {};
   }
 }
