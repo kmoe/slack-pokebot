@@ -2,7 +2,10 @@
 
 var PokemonGO = require('pokemon-go-node-api');
 var request = require('request');
+var geolib = require('geolib');
 var _ = require('lodash');
+
+var metrics = require('./metrics');
 
 var a = new PokemonGO.Pokeio();
 
@@ -61,10 +64,12 @@ a.init(username, password, location, provider, function(err) {
               });
 
               if (!pokemonAlreadyPresent) {
-                var latitude = wildPokemon[j].Latitude;
-                var longitude = wildPokemon[j].Longitude;
+                var position = { latitude : wildPokemon[j].Latitude
+                                 longitude : wildPokemon[j].Longitude};
 
-                var message = 'There is a ' + pokemon.name + ' nearby! Map: https://maps.google.co.uk/maps?f=d&dirflg=w&saddr='+start_location'&daddr=' + latitude + ',' + longitude;
+                var distance = geolib.getDistance(postion,start_location)
+
+                var message = 'There is a ' + pokemon.name + ' '+distance+"m away! Route: https://maps.google.co.uk/maps?f=d&dirflg=w&saddr='+start_location.latitude+","+start_location.longditude+'&daddr=' + position.latitude + ',' + position.longitude;
                 console.log(pokemon.name + ' detected');
 
                 request.post({
