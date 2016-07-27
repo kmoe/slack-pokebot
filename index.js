@@ -18,7 +18,7 @@ var username = process.env.PGO_USERNAME;
 var password = process.env.PGO_PASSWORD;
 var provider = process.env.PGO_PROVIDER || 'google';
 
-var pokeMap;
+var pokeMap = {};
 
 a.init(username, password, location, provider, function(err) {
   if (err) throw err;
@@ -55,14 +55,13 @@ a.init(username, password, location, provider, function(err) {
           for (var i = hb.cells.length - 1; i >= 0; i--) {
             if(hb.cells[i].WildPokemon[0]) {
               var wildPokemon = hb.cells[i].WildPokemon;
-
+              var newPokeMap = {};
               for (var j = wildPokemon.length - 1; j >= 0; j--) {
                 var pokeId = wildPokemon[j].pokemon.PokemonId;
                 var pokemon = a.pokemonlist[parseInt(pokeId)-1];
+                newPokeMap[ pokemon.id ] = true;
 
-                var pokemonAlreadyPresent = _.some(pokeMap, function(poke) {
-                  return poke.id === pokeId;
-                });
+                var pokemonAlreadyPresent = pokeMap[ pokemon.id ];
 
                 if (!pokemonAlreadyPresent) {
                   var latitude = wildPokemon[j].Latitude;
@@ -74,32 +73,28 @@ a.init(username, password, location, provider, function(err) {
                   if ( metrics.shouldReport( wildPokemon[j] , pokemon , distance) ){
                     var message = 'There is a *' + pokemon.name + '* ('+pokemon.num+') '+distance+'m away! <https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=' + start_location.latitude+","+start_location.longitude+'&daddr=' + position.latitude + ',' + position.longitude+'|Route>';
                     if ( process.env.SLACK_WWEBHOOK_URL ){
-                    request.post({
-                      url: process.env.SLACK_WEBHOOK_URL,
-                      json: true,
-                      body: {
-                        text: message,
-                        icon_url: pokemon.img
-                      }
-                    }, function(error, response, body) {
-                      console.error(error);
-                      if(response.body) console.log(response.body);
-                    });
-                  }else{
-                    console.log("POST: "+ message );
+                      request.post({
+                        url: process.env.SLACK_WEBHOOK_URL,
+                        json: true,
+                        body: {
+                          text: message,
+                          icon_url: pokemon.img
+                        }
+                      }, function(error, response, body) {
+                        console.error(error);
+                        if(response.body) console.log(response.body);
+                      });
+                    }else{
+                      console.log("POST: "+ message );
+                    }
+                  } else {
+                    console.log(pokemon.name + ' not interesting: skipping');
                   }
                 } else {
-                  console.log(pokemon.name + ' not interesting: skipping');
+                 console.log(pokemon.name + ' already present: skipping');
                 }
-              } else {
-               console.log(pokemon.name + ' already present: skipping');
               }
-            }
-              pokeMap = _.map(wildPokemon, function(poke) {
-                return {
-                  id: poke.pokemon.PokemonId
-                };
-              });
+              pokeMap = newPokeMap;
             }
           }
         }
