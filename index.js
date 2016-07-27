@@ -94,7 +94,7 @@ a.init(username, password, location, provider, function(err) {
                           icon_url: pokemon.img
                         }
                       }, function(error, response, body) {
-                        winston.log('error', error);
+                        if (error) winston.log('error', error);
                         if(response.body) console.log(response.body);
                       });
                     }
