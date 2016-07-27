@@ -7,6 +7,18 @@ var _ = require('lodash');
 
 var metrics = require('./metrics');
 
+var winston = require('winston');
+require('winston-loggly-bulk');
+
+winston.add(winston.transports.Loggly, {
+  token: "72e76153-570b-4cbe-80e4-b127c6bcc88c",
+  subdomain: "kmoe",
+  tags: ["Winston-NodeJS"],
+  json:true
+});
+
+winston.log('info',"Hello World from Node.js!");
+
 var a = new PokemonGO.Pokeio();
 
 var location = {
