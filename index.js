@@ -7,6 +7,25 @@ var _ = require('lodash');
 
 var metrics = require('./metrics');
 
+var winston;
+if ( process.env.LOGGLY_TOKEN ){
+  winston = require('winston');
+  require('winston-loggly-bulk');
+  winston.add(winston.transports.Loggly, {
+    token: process.env.LOGGLY_TOKEN,
+    subdomain: process.env.LOGGLY_SUBDOMAIN,
+    tags: ["Winston-NodeJS"],
+    json: true
+  });
+}else{
+  winston = {
+    log   : function(type,msg){ console.log(type+"\t: "+msg); },
+    error : function(msg){ console.log("E\t: "+msg); }
+  }
+}
+
+winston.log('info',"Initialised");
+
 var a = new PokemonGO.Pokeio();
 
 var location = {
@@ -23,15 +42,15 @@ var pokeMap = {};
 a.init(username, password, location, provider, function(err) {
   if (err) throw err;
 
-  console.log('1[i] Current location: ' + a.playerInfo.locationName);
-  console.log('1[i] lat/long/alt: : ' + a.playerInfo.latitude + ' ' + a.playerInfo.longitude + ' ' + a.playerInfo.altitude);
+  winston.log('info', 'Current location: ' + a.playerInfo.locationName);
+  winston.log('info', 'lat/long/alt: : ' + a.playerInfo.latitude + ' ' + a.playerInfo.longitude + ' ' + a.playerInfo.altitude);
   var start_location = {latitude:a.playerInfo.latitude,
-                        longitude:a.playerInfo.longitude};
+    longitude:a.playerInfo.longitude};
 
   a.GetProfile(function(err, profile) {
     if (err) throw err;
 
-    console.log('1[i] Username: ' + profile.username);
+    winston.log('info', 'Username: ' + profile.username);
     // console.log('1[i] Poke Storage: ' + profile.poke_storage);
     // console.log('1[i] Item Storage: ' + profile.item_storage);
     //
@@ -46,11 +65,11 @@ a.init(username, password, location, provider, function(err) {
     setInterval(function() {
       a.Heartbeat(function (err,hb) {
         if(err) {
-          console.error(err);
+          winston.log('error', err);
         }
 
         if (!hb || !hb.cells) {
-          console.error('hb or hb.cells undefined - aborting');
+          winston.log('error', 'hb or hb.cells undefined - aborting');
         } else {
           for (var i = hb.cells.length - 1; i >= 0; i--) {
             if(hb.cells[i].WildPokemon[0]) {
@@ -68,11 +87,11 @@ a.init(username, password, location, provider, function(err) {
                   var longitude = wildPokemon[j].Longitude;
 
                   var position = { latitude : wildPokemon[j].Latitude,
-                                   longitude : wildPokemon[j].Longitude};
+                    longitude : wildPokemon[j].Longitude};
                   var distance = geolib.getDistance(position,start_location)
                   if ( metrics.shouldReport( wildPokemon[j] , pokemon , distance) ){
                     var message = 'There is a *' + pokemon.name + '* ('+pokemon.num+') '+distance+'m away! <https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=' + start_location.latitude+","+start_location.longitude+'&daddr=' + position.latitude + ',' + position.longitude+'|Route>';
-                    if ( process.env.SLACK_WWEBHOOK_URL ){
+                    if ( process.env.SLACK_WEBHOOK_URL ){
                       request.post({
                         url: process.env.SLACK_WEBHOOK_URL,
                         json: true,
@@ -81,17 +100,16 @@ a.init(username, password, location, provider, function(err) {
                           icon_url: pokemon.img
                         }
                       }, function(error, response, body) {
-                        console.error(error);
+                        winston.log('error', error);
                         if(response.body) console.log(response.body);
                       });
-                    }else{
-                      console.log("POST: "+ message );
                     }
+                    winston.log('info', "POST: "+ message );
                   } else {
-                    console.log(pokemon.name + ' not interesting: skipping');
+                    winston.log('info', pokemon.name + ' not interesting: skipping');
                   }
                 } else {
-                 console.log(pokemon.name + ' already present: skipping');
+                  winston.log('info', pokemon.name + ' already present: skipping');
                 }
               }
               pokeMap = newPokeMap;
