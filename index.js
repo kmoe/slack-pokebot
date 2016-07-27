@@ -85,7 +85,7 @@ a.init(username, password, location, provider, function(err) {
                   var distance = geolib.getDistance(position,start_location)
                   if ( metrics.shouldReport( wildPokemon[j] , pokemon , distance) ){
                     var message = 'There is a *' + pokemon.name + '* ('+pokemon.num+') '+distance+'m away! <https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=' + start_location.latitude+","+start_location.longitude+'&daddr=' + position.latitude + ',' + position.longitude+'|Route>';
-                    if ( process.env.SLACK_WWEBHOOK_URL ){
+                    if ( process.env.SLACK_WEBHOOK_URL ){
                     request.post({
                       url: process.env.SLACK_WEBHOOK_URL,
                       json: true,
