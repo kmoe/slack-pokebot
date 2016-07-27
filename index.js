@@ -64,7 +64,7 @@ a.init(username, password, location, provider, function(err) {
                 var latitude = wildPokemon[j].Latitude;
                 var longitude = wildPokemon[j].Longitude;
 
-                var message = 'There is a ' + pokemon.name + ' nearby! Map: https://maps.google.co.uk/maps?f=d&dirflg=w&saddr='+start_location'&daddr=' + latitude + ',' + longitude;
+                var message = 'There is a ' + pokemon.name + ' nearby! Map: https://maps.google.co.uk/maps?f=d&dirflg=w&saddr='+start_location+'&daddr=' + latitude + ',' + longitude;
                 console.log(pokemon.name + ' detected');
 
                 request.post({
