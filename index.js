@@ -64,25 +64,28 @@ a.init(username, password, location, provider, function(err) {
               });
 
               if (!pokemonAlreadyPresent) {
-                var position = { latitude : wildPokemon[j].Latitude
+                var position = { latitude : wildPokemon[j].Latitude,
                                  longitude : wildPokemon[j].Longitude};
 
                 var distance = geolib.getDistance(postion,start_location)
+                if ( metrics.shouldReport( wildPokemon[j] , pokemon , distance) ){
+                  var message = 'There is a ' + pokemon.name + ' '+distance+'m away! Route: https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=' + start_location.latitude+","+start_location.longditude+'&daddr=' + position.latitude + ',' + position.longitude;
+                  console.log(pokemon.name + ' detected');
 
-                var message = 'There is a ' + pokemon.name + ' '+distance+"m away! Route: https://maps.google.co.uk/maps?f=d&dirflg=w&saddr='+start_location.latitude+","+start_location.longditude+'&daddr=' + position.latitude + ',' + position.longitude;
-                console.log(pokemon.name + ' detected');
-
-                request.post({
-                  url: process.env.SLACK_WEBHOOK_URL,
-                  json: true,
-                  body: {
-                    text: message,
-                    icon_url: pokemon.img
-                  }
-                }, function(error, response, body) {
-                  console.error(error);
-                  console.log(response.body);
-                });
+                  request.post({
+                    url: process.env.SLACK_WEBHOOK_URL,
+                    json: true,
+                    body: {
+                      text: message,
+                      icon_url: pokemon.img
+                    }
+                  }, function(error, response, body) {
+                    console.error(error);
+                    console.log(response.body);
+                  });
+                } else {
+                  console.log(pokemon.name + ' not interesting: skipping');
+                }
               } else {
                console.log(pokemon.name + ' already present: skipping');
               }
