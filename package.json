@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/kmoe/slack-pokebot#readme",
   "dependencies": {
+    "geocoder": "^0.2.2",
     "geolib": "^2.0.21",
     "lodash": "^4.14.0",
     "loggly": "^1.1.0",

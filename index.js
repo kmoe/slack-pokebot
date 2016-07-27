@@ -91,7 +91,7 @@ a.init(username, password, location, provider, function(err) {
                     longitude : wildPokemon[j].Longitude};
                   var distance = geolib.getDistance(position,start_location)
                   if ( metrics.shouldReport( wildPokemon[j] , pokemon , distance) ){
-                    reverseGeoCode(position,start_location, function(geocode){
+                    reverseGeoCode(position, function(geocode){
                       var message = 'There is a *' + pokemon.name + '* ('+pokemon.num+') '+distance+'m away'+geocode+'! <https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=' + start_location.latitude+","+start_location.longitude+'&daddr=' + position.latitude + ',' + position.longitude+'|Route>';
                       if ( process.env.SLACK_WEBHOOK_URL ){
                         request.post({
@@ -127,7 +127,10 @@ a.init(username, password, location, provider, function(err) {
 function reverseGeoCode(location,callback){
  geocoder.reverseGeocode( location.latitude , location.longitude , 
    function(err,data){
-     console.log(data);
-     callback(data);
+     if ( data && data.results && data.results[0] ){
+       callback(' ('+data.results[0].formatted_address+')');
+     }else{
+       callback('');
+     }
    });
 }
