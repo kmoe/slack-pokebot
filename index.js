@@ -43,7 +43,6 @@ a.init(username, password, location, provider, function(err) {
     console.log('1[i] Pokecoin: ' + poke);
     console.log('1[i] Stardust: ' + profile.currency[1].amount);
 
-
     setInterval(function() {
 
       a.Heartbeat(function (err,hb) {
@@ -67,11 +66,9 @@ a.init(username, password, location, provider, function(err) {
               if (!pokemonAlreadyPresent) {
                 var position = { latitude : wildPokemon[j].Latitude,
                                  longitude : wildPokemon[j].Longitude};
-console.log( position , start_location );
                 var distance = geolib.getDistance(position,start_location)
                 if ( metrics.shouldReport( wildPokemon[j] , pokemon , distance) ){
-                  var message = 'There is a ' + pokemon.name + ' '+distance+'m away! <https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=' + start_location.latitude+","+start_location.longitude+'&daddr=' + position.latitude + ',' + position.longitude+'|Route>';
-                  console.log(pokemon.name + ' detected');
+                  var message = 'There is a *' + pokemon.name + '* ('+pokemon.num+') '+distance+'m away! <https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=' + start_location.latitude+","+start_location.longitude+'&daddr=' + position.latitude + ',' + position.longitude+'|Route>';
                   if ( process.env.SLACK_WWEBHOOK_URL ){
                     request.post({
                       url: process.env.SLACK_WEBHOOK_URL,
@@ -85,7 +82,7 @@ console.log( position , start_location );
                       if(response.body) console.log(response.body);
                     });
                   }else{
-                    console.log( message );
+                    console.log("POST: "+ message );
                   }
                 } else {
                   console.log(pokemon.name + ' not interesting: skipping');
