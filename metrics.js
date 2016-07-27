@@ -4,16 +4,21 @@ var fs = require('fs');
 var dataFilePath = process.env.PGO_DATA || ".data";
 var dataset = loadDataSet();
 
+var IntialSensitivity = process.env.PGO_METRIC_INITAL_SENSITIVITY || 100;
+var SensitivityDecreace = process.env.PGO_METRIC_SENSITIVITY_DECREACE || 0.75;
+var SensitivityIncreace = process.env.PGO_METRIC_SENSITIVITY_INCREACE || 1.0;
+
+
 function shouldReport(encounter,pokemon,distance){
   var name = pokemon.name;
   if ( ! dataset[name] ){
-    dataset[name] = { sensitivity:100, lastSeen:Date.now() };
+    dataset[name] = { sensitivity:initalSenstivity, lastSeen:Date.now() };
     triggerSaveDataSet();
     return true;
   }else{
     updateSensitiveity( dataset[name] );
     if ( dataset[name].sensitivity < distance ){ 
-      dataset[name].sensitivity = dataset[name].sensitivity * 0.75;
+      dataset[name].sensitivity = dataset[name].sensitivity * SensitivityDecreace;
       triggerSaveDataSet();
       return true;
     }else{
@@ -45,7 +50,7 @@ function saveDataSet(){
 
 function updateSensitiveity( item ){
   var timeDelta = Date.now() - item.lastSeen;
-  item.sensitivity += timeDelta / (1000*60);
+  item.sensitivity += timeDelta / (1000*60) * SensitivityIncreace;
 }
 
 module.exports = {
