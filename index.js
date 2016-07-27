@@ -35,8 +35,8 @@ var pokeMap;
 a.init(username, password, location, provider, function(err) {
   if (err) throw err;
 
-  console.log('1[i] Current location: ' + a.playerInfo.locationName);
-  console.log('1[i] lat/long/alt: : ' + a.playerInfo.latitude + ' ' + a.playerInfo.longitude + ' ' + a.playerInfo.altitude);
+  winston.log('info', 'Current location: ' + a.playerInfo.locationName);
+  winston.log('info', 'lat/long/alt: : ' + a.playerInfo.latitude + ' ' + a.playerInfo.longitude + ' ' + a.playerInfo.altitude);
   var start_location = {latitude:a.playerInfo.latitude,
     longitude:a.playerInfo.longitude};
 
