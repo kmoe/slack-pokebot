@@ -3,6 +3,7 @@
 var PokemonGO = require('pokemon-go-node-api');
 var request = require('request');
 var geolib = require('geolib');
+var geocoder = require('geocoder');
 var _ = require('lodash');
 
 var metrics = require('./metrics');
@@ -84,21 +85,23 @@ a.init(username, password, location, provider, function(err) {
                     longitude : wildPokemon[j].Longitude};
                   var distance = geolib.getDistance(position,start_location)
                   if ( metrics.shouldReport( wildPokemon[j] , pokemon , distance) ){
-                    var message = 'There is a *' + pokemon.name + '* ('+pokemon.num+') '+distance+'m away! <https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=' + start_location.latitude+","+start_location.longitude+'&daddr=' + position.latitude + ',' + position.longitude+'|Route>';
-                    if ( process.env.SLACK_WEBHOOK_URL ){
-                      request.post({
-                        url: process.env.SLACK_WEBHOOK_URL,
-                        json: true,
-                        body: {
-                          text: message,
-                          icon_url: pokemon.img
-                        }
-                      }, function(error, response, body) {
-                        winston.log('error', error);
-                        if(response.body) console.log(response.body);
-                      });
-                    }
+                    reverseGeoCode(position,start_location, function(geocode){
+                      var message = 'There is a *' + pokemon.name + '* ('+pokemon.num+') '+distance+'m away'+geocode+'! <https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=' + start_location.latitude+","+start_location.longitude+'&daddr=' + position.latitude + ',' + position.longitude+'|Route>';
+                      if ( process.env.SLACK_WEBHOOK_URL ){
+                        request.post({
+                          url: process.env.SLACK_WEBHOOK_URL,
+                          json: true,
+                          body: {
+                            text: message,
+                            icon_url: pokemon.img
+                          }
+                        }, function(error, response, body) {
+                          winston.log('error', error);
+                          if(response.body) console.log(response.body);
+                        });
+                      }
                     winston.log('info', "POST: "+ message );
+                    });
                   } else {
                     winston.log('info', pokemon.name + ' not interesting: skipping');
                   }
@@ -118,3 +121,11 @@ a.init(username, password, location, provider, function(err) {
     }, 60000);
   });
 });
+
+function reverseGeoCode(location,callback){
+ geocoder.reverseGeocode( location.latitude , location.longitude , 
+   function(err,data){
+     console.log(data);
+     callback(data);
+   });
+}
