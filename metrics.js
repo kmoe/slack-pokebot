@@ -4,7 +4,7 @@ var fs = require('fs');
 var dataFilePath = process.env.PGO_DATA || ".data";
 var dataset = loadDataSet();
 
-var IntialSensitivity = process.env.PGO_METRIC_INITAL_SENSITIVITY || 100;
+var InitalSenstivity = process.env.PGO_METRIC_INITAL_SENSITIVITY || 100;
 var SensitivityDecreace = process.env.PGO_METRIC_SENSITIVITY_DECREACE || 0.75;
 var SensitivityIncreace = process.env.PGO_METRIC_SENSITIVITY_INCREACE || 1.0;
 
