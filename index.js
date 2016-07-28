@@ -7,15 +7,22 @@ var _ = require('lodash');
 
 var metrics = require('./metrics');
 
-var winston = require('winston');
-require('winston-loggly-bulk');
-
-winston.add(winston.transports.Loggly, {
-  token: process.env.LOGGLY_TOKEN,
-  subdomain: process.env.LOGGLY_SUBDOMAIN,
-  tags: ["Winston-NodeJS"],
-  json: true
-});
+var winston;
+if ( process.env.LOGGLY_TOKEN ){
+  winston = require('winston');
+  require('winston-loggly-bulk');
+  winston.add(winston.transports.Loggly, {
+    token: process.env.LOGGLY_TOKEN,
+    subdomain: process.env.LOGGLY_SUBDOMAIN,
+    tags: ["Winston-NodeJS"],
+    json: true
+  });
+}else{
+  winston = {
+    log   : function(type,msg){ console.log(type+"\t: "+msg); },
+    error : function(msg){ console.log("E\t: "+msg); }
+  }
+}
 
 winston.log('info',"Initialised");
 
@@ -30,7 +37,7 @@ var username = process.env.PGO_USERNAME;
 var password = process.env.PGO_PASSWORD;
 var provider = process.env.PGO_PROVIDER || 'google';
 
-var pokeMap;
+var pokeMap = {};
 
 a.init(username, password, location, provider, function(err) {
   if (err) throw err;
@@ -67,14 +74,13 @@ a.init(username, password, location, provider, function(err) {
           for (var i = hb.cells.length - 1; i >= 0; i--) {
             if(hb.cells[i].WildPokemon[0]) {
               var wildPokemon = hb.cells[i].WildPokemon;
-
+              var newPokeMap = {};
               for (var j = wildPokemon.length - 1; j >= 0; j--) {
                 var pokeId = wildPokemon[j].pokemon.PokemonId;
                 var pokemon = a.pokemonlist[parseInt(pokeId)-1];
+                newPokeMap[ pokemon.id ] = true;
 
-                var pokemonAlreadyPresent = _.some(pokeMap, function(poke) {
-                  return poke.id === pokeId;
-                });
+                var pokemonAlreadyPresent = pokeMap[ pokemon.id ];
 
                 if (!pokemonAlreadyPresent) {
                   var latitude = wildPokemon[j].Latitude;
@@ -106,11 +112,7 @@ a.init(username, password, location, provider, function(err) {
                   winston.log('info', pokemon.name + ' already present: skipping');
                 }
               }
-              pokeMap = _.map(wildPokemon, function(poke) {
-                return {
-                  id: poke.pokemon.PokemonId
-                };
-              });
+              pokeMap = newPokeMap;
             }
           }
         }
