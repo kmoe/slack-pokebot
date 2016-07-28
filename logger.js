@@ -2,9 +2,9 @@
 
 var logger;
 if ( process.env.LOGGLY_TOKEN ){
-  logger = require('winston');
+  var logger = require('winston');
   require('winston-loggly-bulk');
-  logger.add(winston.transports.Loggly, {
+  logger.add(logger.transports.Loggly, {
     token: process.env.LOGGLY_TOKEN,
     subdomain: process.env.LOGGLY_SUBDOMAIN,
     tags: ["Winston-NodeJS"],
