@@ -4,7 +4,7 @@ var logger;
 if ( process.env.LOGGLY_TOKEN ){
   logger = require('winston');
   require('winston-loggly-bulk');
-  logger.add(winston.transports.Loggly, {
+  logger.add(logger.transports.Loggly, {
     token: process.env.LOGGLY_TOKEN,
     subdomain: process.env.LOGGLY_SUBDOMAIN,
     tags: ["Winston-NodeJS"],
@@ -19,7 +19,7 @@ if ( process.env.LOGGLY_TOKEN ){
 
 process.on('uncaughtException', function(err) {
   logger.error("Unexpected error: "+err)
-  logger.log("Stack trace dumped to console");
+  logger.log('error',"Stack trace dumped to console");
   console.trace(err);
   process.exit(1);
 })
