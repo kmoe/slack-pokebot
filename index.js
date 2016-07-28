@@ -145,13 +145,24 @@ function postPokemonMessage(p){
                     'saddr='+start_location.latitude+","+start_location.longitude+'&'+
                     'daddr='+p.position.latitude+','+p.position.longitude+'|Show route> -- ' + p.distance+'m ('+p.bearing+geocode + ').\n' +
         remaining;
+
+      var RARITY_RANKING = ['common', 'uncommon', 'rare', 'ultra-rare'];
+      var COLOUR_RANKING = ['']
+
+
        if ( process.env.SLACK_WEBHOOK_URL ){
         request.post({
           url: process.env.SLACK_WEBHOOK_URL,
           json: true,
           body: {
-            text: message,
-            icon_url: p.pokemon.img
+            attachments: [
+              {
+                "fallback": message,
+                "color": "#36a64f",
+                "image_url": p.pokemon.img,
+                "text": message
+              }
+            ]
           }
         }, function(error, response, body) {
           if(error) logger.error(error);
