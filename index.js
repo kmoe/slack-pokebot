@@ -146,8 +146,12 @@ function postPokemonMessage(p){
                     'daddr='+p.position.latitude+','+p.position.longitude+'|Show route> -- ' + p.distance+'m ('+p.bearing+geocode + ').\n' +
         remaining;
 
-      var RARITY_RANKING = ['common', 'uncommon', 'rare', 'ultra-rare'];
-      var COLOUR_RANKING = ['']
+      var COLOUR_BY_RARITY = {
+        "common": "#19A643",
+        "uncommon": "#1BC4B9",
+        "rare": "#1E0BE6",
+        "ultra-rare": "#E600FF"
+      };
 
 
        if ( process.env.SLACK_WEBHOOK_URL ){
@@ -158,7 +162,7 @@ function postPokemonMessage(p){
             attachments: [
               {
                 "fallback": message,
-                "color": "#36a64f",
+                "color": COLOUR_BY_RARITY[p.rarity],
                 "image_url": p.pokemon.img,
                 "text": message
               }
