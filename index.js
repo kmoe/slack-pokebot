@@ -140,10 +140,10 @@ function postPokemonMessage(p){
     geo.reverseGeoCode(p.position, function(geocode){
       var seconds = Math.floor(p.details.TimeTillHiddenMs / 1000);
       var remaining = Math.floor(seconds/60)+":"+Math.floor(seconds%60)+" remaining";
-      var message = pre+'A wild *' + p.pokemon.name + '* (' + p.rarity + ') appeared!\n' +
+      var message = pre+'A wild *' + p.pokemon.name + '* appeared!\n' +
                     '<https://maps.google.co.uk/maps?f=d&dirflg=w&'+
                     'saddr='+start_location.latitude+","+start_location.longitude+'&'+
-                    'daddr='+p.position.latitude+','+p.position.longitude+'|Show route> -- ' + p.distance+'m ('+p.bearing+geocode + ').\n' +
+                    'daddr='+p.position.latitude+','+p.position.longitude+'|'+p.distance+'m '+p.bearing+geocode + ')>\n' +
         remaining;
 
       var COLOUR_BY_RARITY = {
