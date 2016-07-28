@@ -164,7 +164,8 @@ function postPokemonMessage(p){
                 "fallback": message,
                 "color": COLOUR_BY_RARITY[p.rarity],
                 "image_url": p.pokemon.img,
-                "text": message
+                "text": message,
+                "unfurl_media": true
               }
             ]
           }
