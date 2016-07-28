@@ -16,6 +16,15 @@ var location = {
   type: 'name',
   name: process.env.PGO_LOCATION,
 };
+var geo = process.env.PGO_LOCATION.match(/^(-?\d+\.\d+),(-?\d+\.\d+)$/);
+if ( geo ){
+  location.type = 'coords';
+  location.coords = {
+    latitude:parseFloat(geo[1]),
+    longitude:parseFloat(geo[2]),
+    altitude:0.0
+  }
+}
 
 var username = process.env.PGO_USERNAME;
 var password = process.env.PGO_PASSWORD;
