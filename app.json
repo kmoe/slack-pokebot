@@ -24,7 +24,9 @@
       "description": "Your Loggly auth token, if you want to use Loggly.",
       "required": false
     },
-    "LOGGLY_SUBDOMAIN": "Your Loggly subdomain, if you want to use Loggly.",
-    "required": false
+    "LOGGLY_SUBDOMAIN": {
+      "description": "Your Loggly subdomain, if you want to use Loggly.",
+      "required": false
+    }
   }
 }
