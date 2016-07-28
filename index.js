@@ -8,6 +8,7 @@ var logger = require('./logger');
 var metrics = require('./metrics');
 var geo = require('./geo');
 
+
 logger.log('info',"Initialised");
 
 var a = new PokemonGO.Pokeio();
@@ -63,10 +64,11 @@ a.init(username, password, location, provider, function(err) {
 
                   var position = { latitude : wildPokemon[j].Latitude,
                     longitude : wildPokemon[j].Longitude};
-                  var distance = geo.getDistance(position,start_location)
+                  var distance = geo.getDistance(position,start_location);
+                  var bearing = geo.cardinalBearing(geo.getBearing(start_location,position));
                   if ( metrics.shouldReport( wildPokemon[j] , pokemon , distance) ){
                     geo.reverseGeoCode(position, function(geocode){
-                      var message = 'There is a *' + pokemon.name + '* ('+pokemon.num+') '+distance+'m away'+geocode+'! <https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=' + start_location.latitude+","+start_location.longitude+'&daddr=' + position.latitude + ',' + position.longitude+'|Route>';
+                      var message = 'There is a *' + pokemon.name + '* ('+pokemon.num+') '+distance+'m '+bearing+geocode+'! <https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=' + start_location.latitude+","+start_location.longitude+'&daddr=' + position.latitude + ',' + position.longitude+'|Route>';
                       if ( process.env.SLACK_WEBHOOK_URL ){
                         request.post({
                           url: process.env.SLACK_WEBHOOK_URL,

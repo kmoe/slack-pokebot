@@ -17,6 +17,13 @@ if ( process.env.LOGGLY_TOKEN ){
   }
 }
 
+process.on('uncaughtException', function(err) {
+  logger.error("Unexpected error: "+err)
+  logger.log("Stack trace dumped to console");
+  console.trace(err);
+  process.exit(1);
+})
+
 logger.log('info',"Initialised");
 
 module.exports = logger;
