@@ -1,0 +1,30 @@
+{
+  "name": "slack-pokebot",
+  "description": "Posts the location of nearby Pokemon to Slack.",
+  "keywords": [
+    "pokemon",
+    "slack"
+  ],
+  "repository": "https://github.com/kmoe/slack-pokebot",
+  "env": {
+    "PGO_USERNAME": {
+      "description": "Pokemon Go username used to log in."
+    },
+    "PGO_PASSWORD": {
+      "description": "Pokemon Go user password used to log in."
+    },
+    "PGO_LOCATION": {
+      "description": "Location where you want to detect Pokemon. Parsed by Google Maps so test it there."
+    },
+    "SLACK_WEBHOOK_URL": {
+      "description": "URL of the Incoming Webhook set up in Slack.",
+      "required": false
+    },
+    "LOGGLY_TOKEN": {
+      "description": "Your Loggly auth token, if you want to use Loggly.",
+      "required": false
+    },
+    "LOGGLY_SUBDOMAIN": "Your Loggly subdomain, if you want to use Loggly.",
+    "required": false
+  }
+}
