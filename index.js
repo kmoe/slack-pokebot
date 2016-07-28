@@ -78,7 +78,6 @@ a.init(username, password, location, provider, function(err) {
               }
             }
           }
-console.log(encounters);
           var hbPokemon = [];
           for ( var key in encounters ){
             hbPokemon.push(encounters[key]);
@@ -131,7 +130,11 @@ function removeUninteretingPokemon(pokemon){
 
 function sendMessage(pokemon){
   for ( var id in pokemon ){
-    var p = pokemon[id];
+    postPokemonMessage(pokemon[id]);
+  }
+}
+
+function postPokemonMessage(p){
     var pre = "";
     if ( p.rarity.match(/rare/i) ) pre = "@here ";
     geo.reverseGeoCode(p.position, function(geocode){
@@ -141,7 +144,7 @@ function sendMessage(pokemon){
                     '<https://maps.google.co.uk/maps?f=d&dirflg=w&'+
                     'saddr='+start_location.latitude+","+start_location.longitude+'&'+
                     'daddr='+p.position.latitude+','+p.position.longitude+'|Show route> '+remaining
-                  +" ("+p.details.SpawnPointId+" "+p.pokemon.height+" "+p.pokemon.weight+" "+p.details.EncounterId+")";
+                  +" ("+p.pokemon.height+"/"+p.pokemon.weight+")";
        if ( process.env.SLACK_WEBHOOK_URL ){
         request.post({
           url: process.env.SLACK_WEBHOOK_URL,
@@ -157,5 +160,4 @@ function sendMessage(pokemon){
       }
       logger.log('info', "POST: "+ message );
     });
-  }
 }
