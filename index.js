@@ -16,12 +16,12 @@ var location = {
   type: 'name',
   name: process.env.PGO_LOCATION,
 };
-var geo = process.env.PGO_LOCATION.match(/^(-?\d+\.\d+),(-?\d+\.\d+)$/);
-if ( geo ){
+var geoLocation = process.env.PGO_LOCATION.match(/^(-?\d+\.\d+),(-?\d+\.\d+)$/);
+if ( geoLocation ){
   location.type = 'coords';
   location.coords = {
-    latitude:parseFloat(geo[1]),
-    longitude:parseFloat(geo[2]),
+    latitude:parseFloat(geoLocation[1]),
+    longitude:parseFloat(geoLocation[2]),
     altitude:0.0
   }
 }
@@ -113,7 +113,7 @@ function removeUninteretingPokemon(pokemon){
   var interestingPokemon = [];
   for ( var id in pokemon ){ 
     var p = pokemon[id];
-    p.distance = geo.getDistanceBetween(p.position,start_location);
+    p.distance = geo.getDistance(p.position,start_location);
     p.bearing = geo.cardinalBearing(geo.getBearing(start_location,p.position));
     if ( metrics.shouldReport( p ) ){
       interestingPokemon.push(p);
