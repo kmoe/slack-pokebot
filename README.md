@@ -30,6 +30,8 @@ Now click here, and follow the instructions:
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
+**Please note that if you're using a free dyno you'll need to enable the `worker` dyno - see [this issue](https://github.com/kmoe/slack-pokebot/issues/19).**
+
 #### Logging
 
 We've used Loggly, a cloud-based logs service, during development and have left in the option for you to use it if you choose. Just set both of the `LOGGLY` environment variables with details from your account.
