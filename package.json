@@ -1,6 +1,9 @@
 {
   "name": "slack-pokebot",
   "version": "1.0.0",
+  "engines": {
+    "node": "6.3.1"
+  },
   "description": "",
   "main": "index.js",
   "scripts": {
