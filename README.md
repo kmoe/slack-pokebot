@@ -9,6 +9,7 @@
 - Posts one message for each interesting Pokemon
 - Configurable algorithm to determine which Pokemon are interesting
 - Links to Google Map directions from start location to Pokemon location
+- Cute Pokemon icons
 
 ## Quick start
 
@@ -16,11 +17,16 @@ In order to install `slack-pokebot`, you'll need to have permission to add an In
 
 ### 1. Add Incoming Webhook to Slack
 
-Make sure you're logged in to the Slack team you want to install slack-pokebot on, and go to
+Make sure you're logged in to the Slack team you want to install slack-pokebot on, and go to https://YOUR_TEAM_NAME.slack.com/apps/new/A0F7XDUAZ-incoming-webhooks.
+
+Choose the channel you want the bot to post to (ours is called #pokemon-notify), make a note of the webhook URL, and customise the name of the bot if you like.
+
+Save the settings.
+
 
 ### 2. Deploy to Heroku
 
-Just click here, and follow the instructions!
+Now click here, and follow the instructions:
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
@@ -33,9 +39,9 @@ Otherwise, the easiest way to spool logs is to run:
 heroku logs --app YOUR_APP_NAME -t
 ```
 
-## Contributors
+## About
 
-Idea and most of the code by [@katyemoe](https://twitter.com/katyemoe). Awesome metrics feature and many other improvements by [@ChrisJMajor](https://twitter.com/ChrisJMajor).
+Idea and code by [@katyemoe](https://twitter.com/katyemoe). Awesome metrics feature and many other improvements by [@ChrisJMajor](https://twitter.com/ChrisJMajor).
 
 Still under active development - features should not be considered stable.
 
