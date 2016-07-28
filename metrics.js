@@ -9,15 +9,15 @@ var SensitivityDecreace = process.env.PGO_METRIC_SENSITIVITY_DECREACE || 0.75;
 var SensitivityIncreace = process.env.PGO_METRIC_SENSITIVITY_INCREACE || 1.0;
 
 
-function shouldReport(encounter,pokemon,distance){
-  var name = pokemon.name;
+function shouldReport(p){
+  var name = p.pokemon.name;
   if ( ! dataset[name] ){
     dataset[name] = { sensitivity:InitalSenstivity, lastSeen:Date.now() };
     triggerSaveDataSet();
     return true;
   }else{
     updateSensitiveity( dataset[name] );
-    if ( dataset[name].sensitivity < distance ){ 
+    if ( dataset[name].sensitivity < p.distance ){ 
       dataset[name].sensitivity = dataset[name].sensitivity * SensitivityDecreace;
       triggerSaveDataSet();
       return true;

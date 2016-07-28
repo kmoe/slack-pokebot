@@ -24,7 +24,10 @@ var provider = process.env.PGO_PROVIDER || 'google';
 var start_location;
 
 a.init(username, password, location, provider, function(err) {
-  if (err) throw err;
+  if (err){
+    logger.error(err);
+    process.exit(2);
+  }
 
   logger.log('info', 'Current location: ' + a.playerInfo.locationName);
   logger.log('info', 'lat/long/alt: : ' + a.playerInfo.latitude + ' ' + a.playerInfo.longitude + ' ' + a.playerInfo.altitude);
@@ -33,7 +36,10 @@ a.init(username, password, location, provider, function(err) {
     longitude:a.playerInfo.longitude };
 
   a.GetProfile(function(err, profile) {
-    if (err) throw err;
+    if (err){
+      logger.error(err);
+      process.exit(3);
+    }
 
     logger.log('info', 'Username: ' + profile.username);
 
@@ -98,7 +104,6 @@ function removeUniteretingPokemon(pokemon){
   var interestingPokemon = [];
   for ( var id in pokemon ){ 
     var p = pokemon[id];
-console.log(p);
     p.distance = geo.getDistance(p.position,start_location);
     p.bearing = geo.cardinalBearing(geo.getBearing(start_location,p.position));
     if ( metrics.shouldReport( p ) ){
