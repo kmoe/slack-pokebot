@@ -4,9 +4,15 @@
 
 ![There is a Poliwag](image.png)
 
+## Features
+
+- Posts one message for each interesting Pokemon
+- Configurable algorithm to determine which Pokemon are interesting
+- Links to Google Map directions from start location to Pokemon location
+
 ## Quick start
 
-(instructions on how to either (1) add as a Slack app or (2) deploy to Heroku and set up an Incoming Webhook)
+(Deploy to Heroku button)
 
 ## Contributors
 
