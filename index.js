@@ -91,10 +91,10 @@ function removeKnownPokemon(pokemon){
   var unknownPokemon = [];
   for ( var id in pokemon ){ 
     var p = pokemon[id];
-    if ( !knownPokemon[p.id] ){
+    if ( !knownPokemon[p.details.EncounterId] ){
       unknownPokemon.push(p);
     }
-    nextKnownPokemon[p.id] = true;
+    nextKnownPokemon[p.details.EncounterId] = true;
   }
   knownPokemon = nextKnownPokemon;
   return unknownPokemon;
@@ -117,8 +117,11 @@ function sendMessage(pokemon){
   for ( var id in pokemon ){
     var p = pokemon[id];
     geo.reverseGeoCode(p.position, function(geocode){
-      var message = 'There is a *' + p.pokemon.name + '* ('+p.pokemon.num+') '+p.distance+'m '+p.bearing+geocode+'! <https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=' + start_location.latitude+","+start_location.longitude+'&daddr=' + p.position.latitude + ',' + p.position.longitude+'|Route>';
-      if ( process.env.SLACK_WEBHOOK_URL ){
+      var message = 'There is a *' + p.pokemon.name + '* ('+p.pokemon.num+') '+p.distance+'m '+p.bearing+geocode+'! '+
+                    '<https://maps.google.co.uk/maps?f=d&dirflg=w&'+
+                    'saddr='+start_location.latitude+","+start_location.longitude+'&'+
+                    'daddr='+p.position.latitude+','+p.position.longitude+'|Show route>';
+       if ( process.env.SLACK_WEBHOOK_URL ){
         request.post({
           url: process.env.SLACK_WEBHOOK_URL,
           json: true,
