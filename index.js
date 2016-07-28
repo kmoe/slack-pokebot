@@ -16,12 +16,12 @@ var location = {
   type: 'name',
   name: process.env.PGO_LOCATION,
 };
-var geo = process.env.PGO_LOCATION.match(/^(-?\d+\.\d+),(-?\d+\.\d+)$/);
-if ( geo ){
+var geoLocation = process.env.PGO_LOCATION.match(/^(-?\d+\.\d+),(-?\d+\.\d+)$/);
+if ( geoLocation ){
   location.type = 'coords';
   location.coords = {
-    latitude:parseFloat(geo[1]),
-    longitude:parseFloat(geo[2]),
+    latitude:parseFloat(geoLocation[1]),
+    longitude:parseFloat(geoLocation[2]),
     altitude:0.0
   }
 }
@@ -126,8 +126,10 @@ function removeUninteretingPokemon(pokemon){
 function sendMessage(pokemon){
   for ( var id in pokemon ){
     var p = pokemon[id];
+    var pre = "";
+    if ( p.rarity.match(/rare/i) ) pre = "@here ";
     geo.reverseGeoCode(p.position, function(geocode){
-      var message = 'There is a *' + p.pokemon.name + '* ('+p.pokemon.num+') '+p.distance+'m '+p.bearing+geocode+'! '+
+      var message = pre+'There is a '+p.rarity+' *' + p.pokemon.name + '* ('+p.pokemon.num+') '+p.distance+'m '+p.bearing+geocode+'! '+
                     '<https://maps.google.co.uk/maps?f=d&dirflg=w&'+
                     'saddr='+start_location.latitude+","+start_location.longitude+'&'+
                     'daddr='+p.position.latitude+','+p.position.longitude+'|Show route>';
