@@ -79,7 +79,7 @@ a.init(username, password, location, provider, function(err) {
                           }
                         }, function(error, response, body) {
                           if(error) logger.error(error);
-                          if(response.body) console.log(response.body);
+                          if(response.body) logger.log(response.body);
                         });
                       }
                     logger.log('info', "POST: "+ message );
