@@ -37,7 +37,7 @@ function getBearing(start,target){
   var dPhi = Math.log(inner);
   if (Math.abs(dLong) > Math.PI ){
     if (dLong > 0.0)
-      dLong = -2(2*Math.PI - dLong);
+      dLong = -(2*Math.PI - dLong);
     else
       dLong = (2*Math.PI + dLong);
   }
