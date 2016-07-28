@@ -1,15 +1,15 @@
 # slack-pokebot
 
-`slack-pokebot` is a little node.js program that posts a message to Slack whenever a new Pokemon is detected near your location. You can install it for your own Slack team in ten minutes!
+`slack-pokebot` is a little program that posts a message to Slack whenever a new Pokémon is detected near your location. You can install it for your own Slack team in ten minutes!
 
-![There is a Poliwag](image.png)
+![A wild Poliwag appeared!](image.png)
 
 ## Features
 
-- Posts one message for each interesting Pokemon
-- Configurable algorithm to determine which Pokemon are interesting
-- Links to Google Map directions from start location to Pokemon location
-- Cute Pokemon icons
+- Posts one message for each interesting Pokémon
+- Configurable algorithm to determine which Pokémon are interesting
+- Links to Google Map directions from start location to Pokémon location
+- Cute Pokémon icons
 
 ## Quick start
 
