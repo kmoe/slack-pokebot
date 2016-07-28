@@ -104,7 +104,7 @@ function removeUninteretingPokemon(pokemon){
   var interestingPokemon = [];
   for ( var id in pokemon ){ 
     var p = pokemon[id];
-    p.distance = geo.getDistance(p.position,start_location);
+    p.distance = geo.getDistanceBetween(p.position,start_location);
     p.bearing = geo.cardinalBearing(geo.getBearing(start_location,p.position));
     if ( metrics.shouldReport( p ) ){
       interestingPokemon.push(p);
