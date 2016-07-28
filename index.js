@@ -72,7 +72,7 @@ a.init(username, password, location, provider, function(err) {
           var newPokemon = removeKnownPokemon( hbPokemon );
           logger.log('info','Found '+newPokemon.length+' new pokemon');
           if ( newPokemon.length == 0 ) return;
-          var interestingPokemon = removeUniteretingPokemon( newPokemon );
+          var interestingPokemon = removeUninteretingPokemon( newPokemon );
           logger.log('info','Found '+interestingPokemon.length+' interesting pokemon');
           if ( interestingPokemon.length == 0 ) return;
           sendMessage( interestingPokemon );
@@ -100,7 +100,7 @@ function removeKnownPokemon(pokemon){
   return unknownPokemon;
 }
 
-function removeUniteretingPokemon(pokemon){
+function removeUninteretingPokemon(pokemon){
   var interestingPokemon = [];
   for ( var id in pokemon ){ 
     var p = pokemon[id];
