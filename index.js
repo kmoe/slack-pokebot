@@ -64,7 +64,7 @@ a.init(username, password, location, provider, function(err) {
           logger.error('hb or hb.cells undefined - aborting');
         } else {
           logger.log('info', 'Heartbeat received');
-          var hbPokemon = [];
+          var encounters = {};
           for (var i = hb.cells.length - 1; i >= 0; i--) {
             if(hb.cells[i].WildPokemon[0]) {
               var wildPokemon = hb.cells[i].WildPokemon;
@@ -73,9 +73,14 @@ a.init(username, password, location, provider, function(err) {
                 var pokemon = a.pokemonlist[parseInt(pokeId)-1];
                 var position = { latitude : wildPokemon[j].Latitude,
                                  longitude : wildPokemon[j].Longitude};
-                hbPokemon.push( { pokemon:pokemon , details:wildPokemon[j], position:position });
+                var encounterId = wildPokemon[j].SpawnPointId;
+                encounters[encounterId]= { pokemon:pokemon , details:wildPokemon[j], position:position };
               }
             }
+          }
+          var hbPokemon = [];
+          for ( var key in encounters ){
+            hbPokemon.push(encounters[key]);
           }
           logger.log('info','Found '+hbPokemon.length+' pokemon');
           if ( hbPokemon.length == 0 ) return;
@@ -101,10 +106,10 @@ function removeKnownPokemon(pokemon){
   var unknownPokemon = [];
   for ( var id in pokemon ){
     var p = pokemon[id];
-    if ( !knownPokemon[p.details.EncounterId] ){
+    if ( !knownPokemon[p.details.SpawnPointId] ){
       unknownPokemon.push(p);
     }
-    nextKnownPokemon[p.details.EncounterId] = true;
+    nextKnownPokemon[p.details.SpawnPointId] = true;
   }
   knownPokemon = nextKnownPokemon;
   return unknownPokemon;
@@ -125,14 +130,21 @@ function removeUninteretingPokemon(pokemon){
 
 function sendMessage(pokemon){
   for ( var id in pokemon ){
-    var p = pokemon[id];
+    postPokemonMessage(pokemon[id]);
+  }
+}
+
+function postPokemonMessage(p){
     var pre = "";
     if ( p.rarity.match(/rare/i) ) pre = "@here ";
     geo.reverseGeoCode(p.position, function(geocode){
+      var seconds = Math.floor(p.details.TimeTillHiddenMs / 1000);
+      var remaining = Math.floor(seconds/60)+":"+Math.floor(seconds%60)+" remaining";
       var message = pre+'There is a '+p.rarity+' *' + p.pokemon.name + '* ('+p.pokemon.num+') '+p.distance+'m '+p.bearing+geocode+'! '+
                     '<https://maps.google.co.uk/maps?f=d&dirflg=w&'+
                     'saddr='+start_location.latitude+","+start_location.longitude+'&'+
-                    'daddr='+p.position.latitude+','+p.position.longitude+'|Show route>';
+                    'daddr='+p.position.latitude+','+p.position.longitude+'|Show route> '+remaining
+                  +" ("+p.pokemon.height+"/"+p.pokemon.weight+")";
        if ( process.env.SLACK_WEBHOOK_URL ){
         request.post({
           url: process.env.SLACK_WEBHOOK_URL,
@@ -148,5 +160,4 @@ function sendMessage(pokemon){
       }
       logger.log('info', "POST: "+ message );
     });
-  }
 }
