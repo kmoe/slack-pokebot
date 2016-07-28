@@ -24,6 +24,6 @@ process.on('uncaughtException', function(err) {
   process.exit(1);
 })
 
-logger.log('info',"Initialised");
+logger.log('info',"Logger Initialised");
 
 module.exports = logger;
