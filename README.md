@@ -17,3 +17,5 @@
 ## Contributors
 
 Idea and most of the code by [@katyemoe](https://twitter.com/katyemoe). Awesome metrics feature and many other improvements by [@ChrisJMajor](https://twitter.com/ChrisJMajor).
+
+PRs welcome!
