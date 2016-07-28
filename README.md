@@ -41,7 +41,7 @@ heroku logs --app YOUR_APP_NAME -t
 
 ## About
 
-Idea and code by [@katyemoe](https://twitter.com/katyemoe). Awesome metrics feature and many other improvements by [@ChrisJMajor](https://twitter.com/ChrisJMajor).
+Idea and code by [@katyemoe](https://twitter.com/katyemoe). Awesome metrics feature and many other improvements by [@ChrisJMajor](https://twitter.com/ChrisJMajor). Come work with us at [Improbable](https://improbable.io).
 
 Still under active development - features should not be considered stable.
 
