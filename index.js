@@ -73,11 +73,12 @@ a.init(username, password, location, provider, function(err) {
                 var pokemon = a.pokemonlist[parseInt(pokeId)-1];
                 var position = { latitude : wildPokemon[j].Latitude,
                                  longitude : wildPokemon[j].Longitude};
-                var encounterId = wildPokemon[j].EncounterId;
+                var encounterId = wildPokemon[j].SpawnPointId;
                 encounters[encounterId]= { pokemon:pokemon , details:wildPokemon[j], position:position };
               }
             }
           }
+console.log(encounters);
           var hbPokemon = [];
           for ( var key in encounters ){
             hbPokemon.push(encounters[key]);
@@ -106,10 +107,10 @@ function removeKnownPokemon(pokemon){
   var unknownPokemon = [];
   for ( var id in pokemon ){
     var p = pokemon[id];
-    if ( !knownPokemon[p.details.EncounterId] ){
+    if ( !knownPokemon[p.details.SpawnPointId] ){
       unknownPokemon.push(p);
     }
-    nextKnownPokemon[p.details.EncounterId] = true;
+    nextKnownPokemon[p.details.SpawnPointId] = true;
   }
   knownPokemon = nextKnownPokemon;
   return unknownPokemon;
