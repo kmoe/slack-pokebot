@@ -56,11 +56,12 @@ a.init(username, password, location, provider, function(err) {
       logger.log('info','Requesting heartbeat');
       a.Heartbeat(function (err,hb) {
         if(err) {
-          logger.log('error', err);
+          logger.error(err);
+          process.exit(3);
         }
 
         if (!hb || !hb.cells) {
-          logger.log('error', 'hb or hb.cells undefined - aborting');
+          logger.error('hb or hb.cells undefined - aborting');
         } else {
           logger.log('info', 'Heartbeat received');
           var hbPokemon = [];
@@ -85,7 +86,7 @@ a.init(username, password, location, provider, function(err) {
           logger.log('info','Found '+interestingPokemon.length+' interesting pokemon');
           if ( interestingPokemon.length == 0 ) return;
           sendMessage( interestingPokemon );
-        } 
+        }
       });
     }
     getHeartbeat();
@@ -98,7 +99,7 @@ var knownPokemon = {};
 function removeKnownPokemon(pokemon){
   var nextKnownPokemon = {};
   var unknownPokemon = [];
-  for ( var id in pokemon ){ 
+  for ( var id in pokemon ){
     var p = pokemon[id];
     if ( !knownPokemon[p.details.EncounterId] ){
       unknownPokemon.push(p);
@@ -111,7 +112,7 @@ function removeKnownPokemon(pokemon){
 
 function removeUninteretingPokemon(pokemon){
   var interestingPokemon = [];
-  for ( var id in pokemon ){ 
+  for ( var id in pokemon ){
     var p = pokemon[id];
     p.distance = geo.getDistance(p.position,start_location);
     p.bearing = geo.cardinalBearing(geo.getBearing(start_location,p.position));
