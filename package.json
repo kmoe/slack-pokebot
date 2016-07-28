@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "test": "no",
-    "start": "touch .data && node index.js"
+    "start": "echo {} > .data && node index.js"
   },
   "repository": {
     "type": "git",
