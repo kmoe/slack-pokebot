@@ -140,11 +140,11 @@ function postPokemonMessage(p){
     geo.reverseGeoCode(p.position, function(geocode){
       var seconds = Math.floor(p.details.TimeTillHiddenMs / 1000);
       var remaining = Math.floor(seconds/60)+":"+Math.floor(seconds%60)+" remaining";
-      var message = pre+'There is a '+p.rarity+' *' + p.pokemon.name + '* ('+p.pokemon.num+') '+p.distance+'m '+p.bearing+geocode+'! '+
+      var message = pre+'A wild *' + p.pokemon.name + '* (' + p.rarity + ') appeared! ' +
                     '<https://maps.google.co.uk/maps?f=d&dirflg=w&'+
                     'saddr='+start_location.latitude+","+start_location.longitude+'&'+
-                    'daddr='+p.position.latitude+','+p.position.longitude+'|Show route> '+remaining
-                  +" ("+p.pokemon.height+"/"+p.pokemon.weight+")";
+                    'daddr='+p.position.latitude+','+p.position.longitude+'|Show route> (' + p.distance+'m '+p.bearing+geocode + '). ' +
+        remaining;
        if ( process.env.SLACK_WEBHOOK_URL ){
         request.post({
           url: process.env.SLACK_WEBHOOK_URL,
