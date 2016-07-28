@@ -2,7 +2,7 @@
 
 var logger;
 if ( process.env.LOGGLY_TOKEN ){
-  var logger = require('winston');
+  logger = require('winston');
   require('winston-loggly-bulk');
   logger.add(logger.transports.Loggly, {
     token: process.env.LOGGLY_TOKEN,
