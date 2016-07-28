@@ -31,7 +31,6 @@ function loadDataSet(){
   try{
     return JSON.parse(fs.readFileSync( dataFilePath , 'utf8' ));
   }catch(e){
-    console.log(e);
     return {};
   }
 }
