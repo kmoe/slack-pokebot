@@ -137,7 +137,7 @@ function sendMessage(pokemon){
           json: true,
           body: {
             text: message,
-            icon_url: pokemon.img
+            icon_url: p.pokemon.img
           }
         }, function(error, response, body) {
           if(error) logger.error(error);
