@@ -78,7 +78,7 @@ a.init(username, password, location, provider, function(err) {
                             icon_url: pokemon.img
                           }
                         }, function(error, response, body) {
-                          logger.log('error', error);
+                          if(error) logger.error(error);
                           if(response.body) console.log(response.body);
                         });
                       }
