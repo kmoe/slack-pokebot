@@ -9,7 +9,9 @@
 - Posts one message for each interesting Pokémon
 - Configurable algorithm to determine which Pokémon are interesting
 - Links to Google Map directions from start location to Pokémon location
-- Cute Pokémon icons
+- Colour coded by rarity
+- Alerts `@here` when a rare Pokémon appears
+- Cute Pokémon image on each message
 
 ## Quick start
 
