@@ -72,7 +72,7 @@ a.init(username, password, location, provider, function(err) {
                 var pokeId = wildPokemon[j].pokemon.PokemonId;
                 var pokemon = a.pokemonlist[parseInt(pokeId)-1];
                 var position = { latitude : wildPokemon[j].Latitude,
-                                 longitude : wildPokemon[j].Longitude};
+                  longitude : wildPokemon[j].Longitude};
                 var encounterId = wildPokemon[j].SpawnPointId;
                 encounters[encounterId]= { pokemon:pokemon , details:wildPokemon[j], position:position };
               }
@@ -135,47 +135,46 @@ function sendMessage(pokemon){
 }
 
 function postPokemonMessage(p){
-    var pre = "";
-    if ( p.rarity.match(/rare/i) ) pre = "@here ";
-    geo.reverseGeoCode(p.position, function(geocode){
-      var seconds = Math.floor(p.details.TimeTillHiddenMs / 1000);
-      var remaining = Math.floor(seconds/60)+":"+Math.floor(seconds%60)+" remaining";
-      var pretext = pre+'A wild *' + p.pokemon.name + '* appeared!';
-      var message = '<https://maps.google.co.uk/maps?f=d&dirflg=w&'+
-                    'saddr='+start_location.latitude+","+start_location.longitude+'&'+
-                    'daddr='+p.position.latitude+','+p.position.longitude+'|'+p.distance+'m '+p.bearing+geocode + ')>\n' +
-        remaining;
+  var pre = "";
+  if ( p.rarity.match(/rare/i) ) pre = "@here ";
+  geo.reverseGeoCode(p.position, function(geocode){
+    var seconds = Math.floor(p.details.TimeTillHiddenMs / 1000);
+    var remaining = Math.floor(seconds/60)+":"+Math.floor(seconds%60)+" remaining";
+    var pretext = pre+'A wild *' + p.pokemon.name + '* appeared!';
+    var message = '<https://maps.google.co.uk/maps?f=d&dirflg=w&'+
+      'saddr='+start_location.latitude+","+start_location.longitude+'&'+
+      'daddr='+p.position.latitude+','+p.position.longitude+'|'+p.distance+'m '+p.bearing+geocode + '>\n' +
+      remaining;
 
-      var COLOUR_BY_RARITY = {
-        "common": "#19A643",
-        "uncommon": "#1BC4B9",
-        "rare": "#1E0BE6",
-        "ultra-rare": "#E600FF"
-      };
+    var COLOUR_BY_RARITY = {
+      "common": "#19A643",
+      "uncommon": "#1BC4B9",
+      "rare": "#1E0BE6",
+      "ultra-rare": "#E600FF"
+    };
 
-
-       if ( process.env.SLACK_WEBHOOK_URL ){
-        request.post({
-          url: process.env.SLACK_WEBHOOK_URL,
-          json: true,
-          body: {
-            attachments: [
-              {
-                "pretext": pretext,
-                "fallback": pretext + '\n' + message,
-                "color": COLOUR_BY_RARITY[p.rarity],
-                "image_url": p.pokemon.img,
-                "text": message,
-                "unfurl_media": true,
-                "mrkdwn_in": ["pretext"]
-              }
-            ]
-          }
-        }, function(error, response, body) {
-          if(error) logger.error(error);
-          if(response.body) logger.log(response.body);
-        });
-      }
-      logger.log('info', "POST: "+ pretext + '\n' + message );
-    });
+    if ( process.env.SLACK_WEBHOOK_URL ){
+      request.post({
+        url: process.env.SLACK_WEBHOOK_URL,
+        json: true,
+        body: {
+          attachments: [
+            {
+              "pretext": pretext,
+              "fallback": pretext + '\n' + message,
+              "color": COLOUR_BY_RARITY[p.rarity],
+              "image_url": p.pokemon.img,
+              "text": message,
+              "unfurl_media": true,
+              "mrkdwn_in": ["pretext"]
+            }
+          ]
+        }
+      }, function(error, response, body) {
+        if(error) logger.error(error);
+        if(response.body) logger.log(response.body);
+      });
+    }
+    logger.log('info', "POST: "+ pretext + '\n' + message );
+  });
 }
