@@ -8,7 +8,8 @@
   "main": "index.js",
   "scripts": {
     "test": "no",
-    "start": "echo {} > .data && node index.js"
+    "start": "echo {} > .data && node index.js",
+    "lint": "./node_modules/.bin/eslint ."
   },
   "repository": {
     "type": "git",

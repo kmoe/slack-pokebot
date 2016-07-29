@@ -2,7 +2,6 @@
 
 const PokemonGO = require('pokemon-go-node-api');
 const request = require('request');
-const _ = require('lodash');
 
 const logger = require('./logger');
 const metrics = require('./metrics');
@@ -32,29 +31,30 @@ const provider = process.env.PGO_PROVIDER || 'google';
 
 let start_location;
 
-a.init(username, password, location, provider, function (err) {
+a.init(username, password, location, provider, (err) => {
   if (err) {
     logger.error(err);
     process.exit(2);
   }
 
-  logger.log('info', 'Current location: ' + a.playerInfo.locationName);
-  logger.log('info', 'lat/long/alt: : ' + a.playerInfo.latitude + ' ' + a.playerInfo.longitude + ' ' + a.playerInfo.altitude);
+  logger.log('info', `Current location: ${a.playerInfo.locationName}`);
+  logger.log('info', `lat/long/alt: : ${a.playerInfo.latitude} ${a.playerInfo.longitude} ${a.playerInfo.altitude}`);
   start_location = {
     latitude: a.playerInfo.latitude,
-    longitude: a.playerInfo.longitude };
+    longitude: a.playerInfo.longitude,
+  };
 
-  a.GetProfile(function (err, profile) {
+  a.GetProfile((err, profile) => {
     if (err) {
       logger.error(err);
       process.exit(3);
     }
 
-    logger.log('info', 'Username: ' + profile.username);
+    logger.log('info', `Username: ${profile.username}`);
 
     function getHeartbeat() {
       logger.log('info', 'Requesting heartbeat');
-      a.Heartbeat(function (err, hb) {
+      a.Heartbeat((err, hb) => {
         if (err) {
           logger.error(err);
           process.exit(3);
@@ -71,10 +71,16 @@ a.init(username, password, location, provider, function (err) {
               for (let j = wildPokemon.length - 1; j >= 0; j--) {
                 const pokeId = wildPokemon[j].pokemon.PokemonId;
                 const pokemon = a.pokemonlist[parseInt(pokeId) - 1];
-                const position = { latitude: wildPokemon[j].Latitude,
-                  longitude: wildPokemon[j].Longitude };
+                const position = {
+                  latitude: wildPokemon[j].Latitude,
+                  longitude: wildPokemon[j].Longitude,
+                };
                 const encounterId = wildPokemon[j].SpawnPointId;
-                encounters[encounterId] = { pokemon, details: wildPokemon[j], position };
+                encounters[encounterId] = {
+                  pokemon,
+                  details: wildPokemon[j],
+                  position
+                };
               }
             }
           }
@@ -82,14 +88,23 @@ a.init(username, password, location, provider, function (err) {
           for (const key in encounters) {
             hbPokemon.push(encounters[key]);
           }
-          logger.log('info', 'Found ' + hbPokemon.length + ' pokemon');
-          if (hbPokemon.length == 0) return;
+          logger.log('info', `Found ${hbPokemon.length} pokemon`);
+
+          if (hbPokemon.length == 0) {
+            return;
+          }
+
           const newPokemon = removeKnownPokemon(hbPokemon);
-          logger.log('info', 'Found ' + newPokemon.length + ' new pokemon');
-          if (newPokemon.length == 0) return;
-          const interestingPokemon = removeUninteretingPokemon(newPokemon);
-          logger.log('info', 'Found ' + interestingPokemon.length + ' interesting pokemon');
-          if (interestingPokemon.length == 0) return;
+          logger.log('info', `Found ${newPokemon.length} new pokemon`);
+          if (newPokemon.length == 0) {
+            return;
+          }
+
+          const interestingPokemon = removeUninterestingPokemon(newPokemon);
+          logger.log('info', `Found ${interestingPokemon.length} interesting pokemon`);
+          if (interestingPokemon.length == 0) {
+            return;
+          }
           sendMessage(interestingPokemon);
         }
       });
@@ -115,7 +130,7 @@ function removeKnownPokemon(pokemon) {
   return unknownPokemon;
 }
 
-function removeUninteretingPokemon(pokemon) {
+function removeUninterestingPokemon(pokemon) {
   const interestingPokemon = [];
   for (const id in pokemon) {
     const p = pokemon[id];
@@ -136,15 +151,14 @@ function sendMessage(pokemon) {
 
 function postPokemonMessage(p) {
   let pre = '';
-  if (p.rarity.match(/rare/i)) pre = '@here ';
+  if (p.rarity.match(/rare/i)) {
+    pre = '@here ';
+  }
   geo.reverseGeoCode(p.position, function (geocode) {
     const seconds = Math.floor(p.details.TimeTillHiddenMs / 1000);
-    const remaining = Math.floor(seconds / 60) + ':' + Math.floor(seconds % 60) + ' remaining';
-    const pretext = pre + 'A wild *' + p.pokemon.name + '* appeared!';
-    const message = '<https://maps.google.co.uk/maps?f=d&dirflg=w&' +
-      'saddr=' + start_location.latitude + ',' + start_location.longitude + '&' +
-      'daddr=' + p.position.latitude + ',' + p.position.longitude + '|' + p.distance + 'm ' + p.bearing + geocode + '>\n' +
-      remaining;
+    const remaining = `${Math.floor(seconds / 60)}:${Math.floor(seconds % 60)}m remaining`;
+    const pretext = `${pre} A wild *${p.pokemon.name}* appeared!`;
+    const message = `<https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=${start_location.latitude},${start_location.longitude}&daddr=${p.position.latitude},${p.position.longitude}|${p.distance}m ${p.bearing} ${geocode}>\n${remaining}`;
 
     const COLOUR_BY_RARITY = {
       'common': '#19A643',
