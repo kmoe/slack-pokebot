@@ -140,8 +140,8 @@ function postPokemonMessage(p){
     geo.reverseGeoCode(p.position, function(geocode){
       var seconds = Math.floor(p.details.TimeTillHiddenMs / 1000);
       var remaining = Math.floor(seconds/60)+":"+Math.floor(seconds%60)+" remaining";
-      var message = pre+'A wild *' + p.pokemon.name + '* appeared!\n' +
-                    '<https://maps.google.co.uk/maps?f=d&dirflg=w&'+
+      var pretext = pre+'A wild *' + p.pokemon.name + '* appeared!';
+      var message = '<https://maps.google.co.uk/maps?f=d&dirflg=w&'+
                     'saddr='+start_location.latitude+","+start_location.longitude+'&'+
                     'daddr='+p.position.latitude+','+p.position.longitude+'|'+p.distance+'m '+p.bearing+geocode + ')>\n' +
         remaining;
@@ -161,7 +161,8 @@ function postPokemonMessage(p){
           body: {
             attachments: [
               {
-                "fallback": message,
+                "pretext": pretext,
+                "fallback": pretext + '\n' + message,
                 "color": COLOUR_BY_RARITY[p.rarity],
                 "image_url": p.pokemon.img,
                 "text": message,
@@ -174,6 +175,6 @@ function postPokemonMessage(p){
           if(response.body) logger.log(response.body);
         });
       }
-      logger.log('info', "POST: "+ message );
+      logger.log('info', "POST: "+ pretext + '\n' + message );
     });
 }
