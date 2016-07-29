@@ -1,8 +1,7 @@
 'use strict';
 
-var logger;
+var logger = require('winston');
 if ( process.env.LOGGLY_TOKEN ){
-  logger = require('winston');
   require('winston-loggly-bulk');
   logger.add(logger.transports.Loggly, {
     token: process.env.LOGGLY_TOKEN,
@@ -10,11 +9,6 @@ if ( process.env.LOGGLY_TOKEN ){
     tags: ["Winston-NodeJS"],
     json: true
   });
-}else{
-  logger = {
-    log   : function(type,msg){ console.log(type+"\t: "+msg); },
-    error : function(msg){ console.log("E\t: "+msg); }
-  }
 }
 
 process.on('uncaughtException', function(err) {
