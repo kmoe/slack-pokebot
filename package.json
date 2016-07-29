@@ -7,9 +7,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "no",
     "start": "echo {} > .data && node index.js",
-    "lint": "./node_modules/.bin/eslint ."
+    "lint": "./node_modules/.bin/eslint .",
+    "test": "npm run lint"
   },
   "repository": {
     "type": "git",
