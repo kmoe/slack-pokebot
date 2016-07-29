@@ -166,7 +166,8 @@ function postPokemonMessage(p){
                 "color": COLOUR_BY_RARITY[p.rarity],
                 "image_url": p.pokemon.img,
                 "text": message,
-                "unfurl_media": true
+                "unfurl_media": true,
+                "mrkdwn_in": ["pretext"]
               }
             ]
           }
