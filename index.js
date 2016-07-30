@@ -71,7 +71,7 @@ function postPokemonMessage(p) {
     const seconds = Math.floor(p.details.TimeTillHiddenMs / 1000);
     const remaining = `${Math.floor(seconds / 60)}:${Math.floor(seconds % 60)} remaining`;
     console.log(`seconds: ${seconds}; remaining: ${remaining}`);
-    const message = `${pre} A wild *${p.pokemon.name}* appeared!\n<https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=${start_location.latitude},${start_location.longitude}&daddr=${p.position.latitude},${p.position.longitude}|${p.distance}m ${p.bearing} ${geocode}>`;
+    const message = `${pre} A wild *${p.pokemon.name}* appeared!\n${p.rarity}\n<https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=${start_location.latitude},${start_location.longitude}&daddr=${p.position.latitude},${p.position.longitude}|${p.distance}m ${p.bearing} ${geocode}>`;
 
     const COLOUR_BY_RARITY = {
       common: '#19A643',
