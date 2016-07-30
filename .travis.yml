@@ -1,9 +1,11 @@
 language: node_js
-before_install:
-  - export CC="gcc-4.7";
-    export CXX="g++-4.7";
-    export LINK="gcc-4.7";
-    export LINKXX="g++-4.7";
-
+env:
+  - CXX=g++-4.7
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.7
 install: npm install
 script: npm run lint
