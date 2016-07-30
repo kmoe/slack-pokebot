@@ -1,8 +1,10 @@
 'use strict';
 
 const logger = require('winston');
+
 if (process.env.LOGGLY_TOKEN) {
   require('winston-loggly-bulk');
+
   logger.add(logger.transports.Loggly, {
     token: process.env.LOGGLY_TOKEN,
     subdomain: process.env.LOGGLY_SUBDOMAIN,

@@ -1,11 +1,12 @@
 'use strict';
 
 const fs = require('fs');
+
 const dataFilePath = process.env.PGO_DATA || '.data';
 
 const InitalSenstivity = process.env.PGO_METRIC_INITAL_SENSITIVITY || 1500;
-const SensitivityDecreace = process.env.PGO_METRIC_SENSITIVITY_DECREACE || 0.75;
-const SensitivityIncreace = process.env.PGO_METRIC_SENSITIVITY_INCREACE || 1.0;
+const SensitivityDecrease = process.env.PGO_METRIC_SENSITIVITY_DECREACE || 0.75;
+const SensitivityIncrease = process.env.PGO_METRIC_SENSITIVITY_INCREACE || 1.0;
 
 function loadDataSet() {
   try {
@@ -41,21 +42,21 @@ const rarity = loadRarityData();
 
 function updateSensitivity(item) {
   const timeDelta = Date.now() - item.lastSeen;
-  item.sensitivity += timeDelta / (1000 * 60) * SensitivityIncreace;
+  item.sensitivity += timeDelta / (1000 * 60) * SensitivityIncrease;
 }
 
 function shouldReport(p) {
   const name = p.pokemon.name;
   let result;
   p.rarity = rarity[p.pokemon.id] || 'common';
-  if (! dataset[name]) {
+  if (!dataset[name]) {
     dataset[name] = { sensitivity: InitalSenstivity, lastSeen: Date.now() };
     triggerSaveDataSet();
     result = true;
   } else {
     updateSensitivity(dataset[name]);
     if (dataset[name].sensitivity < p.distance) {
-      dataset[name].sensitivity = dataset[name].sensitivity * SensitivityDecreace;
+      dataset[name].sensitivity *= SensitivityDecrease;
       triggerSaveDataSet();
       result = true;
     }
