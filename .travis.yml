@@ -1,11 +1,15 @@
 language: node_js
 env:
-  - CXX=g++-4.7
+- CXX=g++-4.7
 addons:
   apt:
     sources:
-      - ubuntu-toolchain-r-test
+    - ubuntu-toolchain-r-test
     packages:
-      - g++-4.7
+    - g++-4.7
 install: npm install
 script: npm run lint
+notifications:
+  email: false
+  slack:
+    secure: vtn82oSR23JvvMUSmj64Ai5wC30QBOoR7ZtCoRANTsAkj3cYx4U28MyK/iYNzxP3m4rzpxuvgmDQbCbV87nUedLzji04ME47PLEi5EQlUn8pnsxOFMtuuJyLBcRhxuiX1dkJ2LraM94dq6iaB/rsZTrqh6V2occxkd3iVtlcl1zya6cPMdhvKOXetjcb9kPw/KrsEYgFunT1jOu6Z3CxrPeJ0BnY4SOJN1c3NLmc0gQTMdcxYNNCqmPZrqv6UOKoZBxf02tbc1kRyO4wXcDRLD6IxoB9V65Rvtr/7DtmbIhchSEOLrA5uAg1YADfdyCXsTvIlssBJgPSbdEfNJIm+U2C9TNiGKdqMC7w+LwfghgJvhzWnRjHffUpdvBNXLdvfXC0+rMzK6xwVwUIwxFnW3JzUKM/KDa0gI1YSpt34LtFTJ2Z24Ssz2rRHH8GQ/+WANoAycGaRm9vJs2+m6Q8SpkAvbvSFWMCBQ2TIVRSH4L/WLdiVqsauFmzsJUDsDOWhFRsICroADd+qB0j9lfDCjNGvtveoZnF6EIYClvY6YlA7NL4D7vjsc4+W8MULyS86Mh16jGbfvPODIBMt7gQKb03lKAfyyVQpgHS4HhCmmC/sdnp1EGwUSJwHhiVE4JKsiuI8mIsBHmVKPVw5gbUkUIEE1i1YK2yI/HyYcfqVSU=
