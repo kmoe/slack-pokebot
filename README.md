@@ -36,7 +36,7 @@ Now click here, and follow the instructions:
 
 #### Logging
 
-We've used Loggly, a cloud-based logs service, during development and have left in the option for you to use it if you choose. Just set both of the `LOGGLY` environment variables with details from your account.
+We've used [Loggly](https://loggly.com), a cloud-based logs service, during development and have left in the option for you to use it if you choose. Just set both of the `LOGGLY` environment variables with details from your account.
 
 Otherwise, the easiest way to spool logs to a terminal is to run:
 ```
