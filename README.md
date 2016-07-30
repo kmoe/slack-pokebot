@@ -6,7 +6,7 @@
 
 ## Features
 
-- Posts one message for each interesting Pokémon
+- Posts one message for each interesting Pokémon near target location
 - Configurable algorithm to determine which Pokémon are interesting
 - Links to Google Map directions from start location to Pokémon location
 - Colour coded by rarity
