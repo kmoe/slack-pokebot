@@ -1,4 +1,4 @@
-# slack-pokebot
+# slack-pokebot [![Build Status](https://travis-ci.org/kmoe/slack-pokebot.svg?branch=master)](https://travis-ci.org/kmoe/slack-pokebot)
 
 `slack-pokebot` is a little program that posts a message to Slack whenever a new Pokémon is detected near your location. You can install it for your own Slack team in ten minutes!
 
