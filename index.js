@@ -71,8 +71,7 @@ function postPokemonMessage(p) {
     const seconds = Math.floor(p.details.TimeTillHiddenMs / 1000);
     const remaining = `${Math.floor(seconds / 60)}:${Math.floor(seconds % 60)} remaining`;
     console.log(`seconds: ${seconds}; remaining: ${remaining}`);
-    const pretext = `${pre} A wild *${p.pokemon.name}* appeared!`;
-    const message = `<https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=${start_location.latitude},${start_location.longitude}&daddr=${p.position.latitude},${p.position.longitude}|${p.distance}m ${p.bearing} ${geocode}>`;
+    const message = `${pre} A wild *${p.pokemon.name}* appeared!\n<https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=${start_location.latitude},${start_location.longitude}&daddr=${p.position.latitude},${p.position.longitude}|${p.distance}m ${p.bearing} ${geocode}>`;
 
     const COLOUR_BY_RARITY = {
       common: '#19A643',
@@ -88,13 +87,12 @@ function postPokemonMessage(p) {
         body: {
           attachments: [
             {
-              pretext,
-              fallback: `${pretext}\n${message}`,
+              fallback: message,
               color: COLOUR_BY_RARITY[p.rarity],
               thumb_url: p.pokemon.img,
               text: message,
               unfurl_media: true,
-              mrkdwn_in: ['pretext'],
+              mrkdwn_in: ['text'],
             },
           ],
         },
@@ -107,7 +105,7 @@ function postPokemonMessage(p) {
         }
       });
     }
-    logger.log('info', `POST: ${pretext}\n${message}`);
+    logger.log('info', `POST: ${message}`);
   });
 }
 
