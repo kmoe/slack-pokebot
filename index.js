@@ -91,7 +91,7 @@ function postPokemonMessage(p) {
               pretext,
               fallback: `${pretext}\n${message}`,
               color: COLOUR_BY_RARITY[p.rarity],
-              image_url: p.pokemon.img,
+              thumb_url: p.pokemon.img,
               text: message,
               unfurl_media: true,
               mrkdwn_in: ['pretext'],
