@@ -80,7 +80,7 @@ function postPokemonMessage(p) {
     // if seconds does not make sense, ignore it
     if (seconds < 0) remaining = '';
 
-    const message = `${pre} A wild *${p.pokemon.name}* appeared! ${remaining}\n${p.rarity}\n<https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=${start_location.latitude},${start_location.longitude}&daddr=${p.position.latitude},${p.position.longitude}|${p.distance}m ${p.bearing} ${geocode}>`;
+    const message = `${pre} A wild *${p.pokemon.name}* appeared!\n<https://maps.google.co.uk/maps?f=d&dirflg=w&saddr=${start_location.latitude},${start_location.longitude}&daddr=${p.position.latitude},${p.position.longitude}|${p.distance}m ${p.bearing} ${geocode}>\n${remaining}`;
 
     const COLOUR_BY_RARITY = {
       common: '#19A643',
