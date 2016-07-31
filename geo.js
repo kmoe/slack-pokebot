@@ -1,6 +1,5 @@
 'use strict';
 
-const logger = require('./logger');
 const geolib = require('geolib');
 const geocoder = require('geocoder');
 
@@ -19,11 +18,11 @@ function reverseGeoCode(location, callback) {
 }
 
 function radians(deg) {
-  return deg * Math.PI / 180;
+  return (deg * Math.PI) / 180;
 }
 
 function degrees(rad) {
-  return rad * 180 / Math.PI;
+  return (rad * 180) / Math.PI;
 }
 
 function toRadians(a) {
@@ -39,14 +38,14 @@ function getBearing(start, target) {
   const d = toRadians(target);
   let dLong = d.longitiude - s.longitiude;
   const inner =
-    Math.tan(d.latitude / 2.0 + Math.PI / 4.0) /
-    Math.tan(s.latitude / 2.0 + Math.PI / 4.0);
+    Math.tan((d.latitude / 2.0) + (Math.PI / 4.0)) /
+    Math.tan((s.latitude / 2.0) + (Math.PI / 4.0));
   const dPhi = Math.log(inner);
   if (Math.abs(dLong) > Math.PI) {
     if (dLong > 0.0) {
-      dLong = -(2 * Math.PI - dLong);
+      dLong = -((2 * Math.PI) - dLong);
     } else {
-      dLong = (2 * Math.PI + dLong);
+      dLong = ((2 * Math.PI) + dLong);
     }
   }
   const bearing = degrees(Math.atan2(dLong, dPhi));
@@ -56,7 +55,7 @@ function getBearing(start, target) {
 const cardinals = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
 function cardinalBearing(deg) {
   const degreesPerItem = 360 / cardinals.length;
-  const option = (deg + degreesPerItem * 0.5) / degreesPerItem;
+  const option = (deg + (degreesPerItem * 0.5)) / degreesPerItem;
   const index = Math.floor(option + cardinals.length) % cardinals.length;
   return cardinals[index];
 }

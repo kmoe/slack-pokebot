@@ -52,10 +52,12 @@ function removeUninterestingPokemon(pokemon) {
   const interestingPokemon = [];
 
   _.forEach(pokemon, (poke) => {
-    poke.distance = geo.getDistance(poke.position, start_location);
-    poke.bearing = geo.cardinalBearing(geo.getBearing(start_location, poke.position));
-    if (metrics.shouldReport(poke)) {
-      interestingPokemon.push(poke);
+    const newPoke = _.clone(poke);
+    newPoke.distance = geo.getDistance(poke.position, start_location);
+    newPoke.bearing = geo.cardinalBearing(geo.getBearing(start_location, poke.position));
+    const optionalNewP = metrics.shouldReport(newPoke);
+    if (optionalNewP) {
+      interestingPokemon.push(optionalNewP);
     }
   });
 
@@ -111,6 +113,9 @@ function postPokemonMessage(p) {
         }
         if (response.body) {
           logger.log(response.body);
+        }
+        if (body) {
+          logger.log(body);
         }
       });
     }
