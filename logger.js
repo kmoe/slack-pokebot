@@ -15,8 +15,7 @@ if (process.env.LOGGLY_TOKEN) {
 
 process.on('uncaughtException', (err) => {
   logger.error(`Unexpected error: ${err}`);
-  logger.log('error', 'Stack trace dumped to console');
-  console.trace(err);
+  logger.error(err);
   process.exit(1);
 });
 
