@@ -15,7 +15,7 @@
 
 ## Quick start
 
-In order to install `slack-pokebot`, you'll need to have permission to add an Incoming Webhook to your Slack team (or be an admin), and will need a Heroku* account.
+In order to install `slack-pokebot`, you'll need to have permission to add an Incoming Webhook to your Slack tea, and will need a Heroku* account. You'll also need a Pokémon Go account you don't mind using to make the API requests.
 
 ### 1. Add Incoming Webhook to Slack
 
