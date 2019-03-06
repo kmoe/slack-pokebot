@@ -1,5 +1,7 @@
 # slack-pokebot [![Build Status](https://travis-ci.org/kmoe/slack-pokebot.svg?branch=master)](https://travis-ci.org/kmoe/slack-pokebot)
 
+**Archived: this repository is no longer maintained following changes to the Pokémon Go API and bot rules.**
+
 `slack-pokebot` is a little program that posts a message to Slack whenever a new Pokémon is detected near your location. You can install it for your own Slack team in ten minutes!
 
 ![A wild Poliwag appeared!](image.png)
@@ -46,8 +48,6 @@ heroku logs --app YOUR_APP_NAME -t
 ## About
 
 Idea and code by [@katyemoe](https://twitter.com/katyemoe). Awesome metrics feature and many other improvements by [@ChrisJMajor](https://twitter.com/ChrisJMajor). Come work with us at [Improbable](https://improbable.io).
-
-Still under active development - features should not be considered stable.
 
 ===
 
